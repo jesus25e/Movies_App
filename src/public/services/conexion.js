@@ -12,13 +12,29 @@ const config={
     }
 }
 
-export async function Conectar(params) {
+export async function Conectar() {
     const cliente= new Client(config)
     //pruebas
     try{
         await cliente.connect()
         console.log("Conectado")
     }catch(error){
-        console.log(error)
+        console.error("Error al conectar a la base de datos",error)
+    }finally{
+        await cliente.end();
+    }
+}
+
+export async function TraerPeliculas(){
+    const cliente = new Client(config)
+    try{
+        await cliente.connect()
+        const res = await cliente.query("SELECT * FROM peliculas")
+        return res.rows  
+    }catch(error){
+        console.error("Error al traer peliculas",error)
+        return[];
+    }finally{
+        await cliente.end();
     }
 }
